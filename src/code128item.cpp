@@ -3,7 +3,11 @@
 #include <QPainter>
 #include "code128.h"
 
-Code128Item::Code128Item()
+Code128Item::Code128Item() :
+    m_TextVisible(true),
+    m_Width(200),
+    m_Height(80),
+    m_CodeLength(0)
 {
 }
 
@@ -27,6 +31,11 @@ void Code128Item::setWidth(float width)
 void Code128Item::setHeight(float height)
 {
     m_Height = height;
+}
+
+void Code128Item::setTextVisible(bool visible)
+{
+    m_TextVisible = visible;
 }
 
 QRectF Code128Item::boundingRect() const
@@ -54,11 +63,17 @@ void Code128Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
         if ( i % 2 == 0 )
         {
-            QRectF bar(left, 0, width, m_Height);
+            QRectF bar(left, 0, width, m_TextVisible ? m_Height * .8 : m_Height);
             painter->fillRect(bar, Qt::SolidPattern);
         }
 
         left+= width;
+    }
+
+    if ( m_TextVisible )
+    {
+        QRectF box(0, m_Height * 0.8, left, m_Height * 0.2);
+        painter->drawText(box, m_Text, Qt::AlignHCenter | Qt::AlignVCenter);
     }
 }
 

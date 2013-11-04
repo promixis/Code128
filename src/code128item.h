@@ -6,6 +6,7 @@
 
 class Code128Item : public QGraphicsItem
 {
+    bool m_TextVisible;
     float m_Width;
     float m_Height;
     QString m_Text;
@@ -17,6 +18,7 @@ public:
     void setText ( const QString & text );
     void setWidth( float width );
     void setHeight( float height );
+    void setTextVisible( bool visible );
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget);
