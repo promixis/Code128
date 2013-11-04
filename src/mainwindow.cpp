@@ -3,12 +3,6 @@
 
 
 
-void MainWindow::resizeEvent(QResizeEvent *e)
-{
-    m_Barcode->setWidth( ui->graphicsView->width() * .9 );
-    m_Barcode->setHeight( ui->graphicsView->height() * .9 );
-    m_Barcode->update();
-}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,9 +12,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(&m_Scene);
 
     m_Barcode = new Code128Item();
-
+    m_Barcode->setWidth( 300 );
+    m_Barcode->setHeight( 80 );
     m_Barcode->setPos(0,0);
-    m_Barcode->setText("Promixis");
     m_Scene.addItem( m_Barcode );
     ui->lineEdit->setText("Promixis");
 
