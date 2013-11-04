@@ -38,6 +38,11 @@ void Code128Item::setTextVisible(bool visible)
     m_TextVisible = visible;
 }
 
+void Code128Item::setHighDPI(bool highDPI)
+{
+    m_HighDPI = highDPI;
+}
+
 QRectF Code128Item::boundingRect() const
 {
     return QRectF(0,0, m_Width, m_Height);
@@ -47,13 +52,26 @@ void Code128Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 {
     float lineWidth = m_Width / m_CodeLength;
 
-    // we need to round here as the widths are
-    // required to be quite precise. Rounding
-    // in the rendering system will through off
-    // the widths of the bars if we don't start
-    // with integers.
 
-    lineWidth = qRound(lineWidth);
+    /*
+     * This code tries to fit the barcode right inside the width. If the code
+     * is too long this means that the bar width goes below one pixel. Which in
+     * turn means we get no barcode. On printers this is not a problem too fast
+     * as they have 600 DPI usually. Screens with 96 DPI run out faster.
+     *
+     */
+
+    if ( !m_HighDPI )
+    {
+        lineWidth = qRound(lineWidth);
+        if ( lineWidth < 1 )
+        {
+            lineWidth = 1;
+        }
+    }
+
+
+    float fontHeight = painter->fontMetrics().height();
 
     float left = 0;
     for (int i=0;i<m_Code.length();i++)
@@ -63,7 +81,7 @@ void Code128Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
         if ( i % 2 == 0 )
         {
-            QRectF bar(left, 0, width, m_TextVisible ? m_Height * .8 : m_Height);
+            QRectF bar(left, 0, width, m_Height - fontHeight );
             painter->fillRect(bar, Qt::SolidPattern);
         }
 
@@ -72,7 +90,7 @@ void Code128Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     if ( m_TextVisible )
     {
-        QRectF box(0, m_Height * 0.8, left, m_Height * 0.2);
+        QRectF box(0, m_Height - fontHeight , left, fontHeight);
         painter->drawText(box, m_Text, Qt::AlignHCenter | Qt::AlignVCenter);
     }
 }
