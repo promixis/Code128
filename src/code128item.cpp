@@ -1,8 +1,6 @@
 #include "code128item.h"
 
 #include <QPainter>
-#include <QDebug>
-
 #include "code128.h"
 
 Code128Item::Code128Item()
@@ -23,7 +21,6 @@ void Code128Item::setText(const QString &text)
 
 void Code128Item::setWidth(float width)
 {
-    qDebug() << width;
     m_Width = width;
 }
 
