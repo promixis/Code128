@@ -59,7 +59,7 @@ void Code128Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     for (int i=0;i<m_Code.length();i++)
     {
 
-        int width = m_Code[i] * lineWidth;
+        float width = m_Code[i] * lineWidth;
 
         if ( i % 2 == 0 )
         {
