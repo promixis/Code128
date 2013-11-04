@@ -67,7 +67,6 @@ Code128::Symbol Code128::symbolCode(quint8 c)
 void Code128::addSymbolCodeChar(char c, QStringList &symbols, int &checksum)
 {
     // keep characters in valid range.
-    // we do not do the latin characters.
     if ( c < 32 )
     {
         c = 32;
@@ -102,7 +101,7 @@ quint8 Code128::digitCount(const QString &data, int startPos)
         cnt++;
     }
 
-    cnt &= 0xfe; // only even pairs please.
+    cnt &= 0xfe; // only pairs please.
     return cnt;
 }
 
@@ -111,7 +110,7 @@ Code128::BarCode Code128::encode(const QString &data)
     QStringList symbols;
     int checkSum = 0;
 
-    if ( data.length() > 100 )
+    if ( data.length() > 100 || data.length() == 0 )
     {
         return BarCode();
     }
